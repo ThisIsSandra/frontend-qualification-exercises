@@ -2,23 +2,19 @@
 
 import { useQuery } from "@apollo/client/react";
 
-import { Member, MembersData } from "@/types/member";
+import { MembersQueryData, MembersQueryVars } from "@/types/member";
 import { GET_MEMBERS } from "@/lib/queries/members";
 
 export default function Home() {
   
-  const { loading, error, data } = useQuery<MembersData>(GET_MEMBERS);
+  const { data, loading, error, fetchMore } = useQuery<MembersQueryData, MembersQueryVars>(GET_MEMBERS, {
+    variables: { first: 10 },
+  });
+
+  const members = data?.members?.edges.map((e: any) => e.node) ?? [];
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
-
-  
-  // name: string;
-  // emailAddress: string;
-  // mobileNumber: string;
-  // domain: string;
-  // status: string;
-  // verificationStatus: string;
 
   return (
     <div className="font-sans p-10">
@@ -32,14 +28,28 @@ export default function Home() {
           <>
             <h1>Members. You did it!{` :)`}</h1>
             <ul>
-              {data?.members.edges.map(({ node }: { node: Member }) => (
-                <li key={node.id} className="mb-4">
-                  <div>{node.name} #{node.id}</div>
-                  <div>Status: {node.status}</div>
-                  <div>Domain: {node.domain || '--'}</div>
-                  <div>Verification: {node.verificationStatus}</div>
-                </li>
-              ))}
+               {members.map((m) => (
+            <tr key={m.id}>
+              <td className="px-4 py-2 border">{m.name || '--'}</td>
+              <td className="px-4 py-2 border">{m.verificationStatus || '--'}</td>
+              <td className="px-4 py-2 border">{m.emailAddress || '--'}</td>
+              <td className="px-4 py-2 border">{m.mobileNumber || '--'}</td>
+              <td className="px-4 py-2 border">{m.domain || '--'}</td>
+              <td className="px-4 py-2 border">{m.status || '--'}</td>
+              <td className="px-4 py-2 border">{m.dateTimeLastActive || '--'}</td>
+            </tr>
+//             dateTimeCreated:"2025-09-05T09:10:55.000Z"
+// dateTimeLastActive:"2025-09-05T09:11:10.000Z"
+// domain:null
+// emailAddress:null
+// id:"hdBeCc3tWrL6CD8fr"
+// mobileNumber:"+639******374"
+// name:"user395094031"
+// status:"ACTIVE"
+// verificationStatus:"VERIFIED"
+// __typename:"Member"
+// __typename:"Edge"
+          ))}
             </ul>
 
           </>

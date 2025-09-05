@@ -1,22 +1,26 @@
 import { gql } from "@apollo/client";
 
 export const GET_MEMBERS = gql`
-  query GetMembers {
-    members(first: 10) {
+  query GetMembers($first: Int, $after: Cursor, $filter: MemberFilterInput) {
+    members(first: $first, after: $after, filter: $filter) {
       edges {
         node {
           id
           ... on Member {
             name
-            status
-            domain
             verificationStatus
             emailAddress
             mobileNumber
+            domain
             dateTimeCreated
             dateTimeLastActive
+            status
           }
         }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
