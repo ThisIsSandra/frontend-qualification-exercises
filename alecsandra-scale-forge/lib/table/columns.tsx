@@ -68,6 +68,10 @@ export const memberColumns: ColumnDef<Member>[] = [
     header: "Domain",
   },
   {
+    accessorKey: "dateTimeCreated",
+    header: "Date Registered",
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ getValue }) => {
@@ -104,10 +108,6 @@ export const memberColumns: ColumnDef<Member>[] = [
         </span>
       );
     },
-  },
-  {
-    accessorKey: "dateTimeCreated",
-    header: "Created",
   },
   {
     accessorKey: "dateTimeLastActive",

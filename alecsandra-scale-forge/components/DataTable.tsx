@@ -10,6 +10,8 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
 interface DataTableProps<TData> {
   columns: ColumnDef<TData, any>[];
   data: TData[];
@@ -43,18 +45,23 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-0 p-4">
       {/* 🔍 Search */}
-      <input
-        value={globalFilter ?? ""}
-        onChange={(e) => setGlobalFilter(e.target.value)}
-        placeholder="Search members..."
-        className="p-2 border rounded w-full bg-[#0B1D26]"
-      />
+      
 
       {/* 📋 Table */}
-      <div className="overflow-x-auto shadow border border-[#2E2E2E]">
-        <table className="min-w-full bg-[#0B1D26]">
+      <div className="w-full overflow-x-auto shadow border border-[#2E2E2E] rounded-xl">
+        <div className="w-full justify-between p-4 bg-[#0B1D26] border-b border-[#2E2E2E]">
+          <input
+            value={globalFilter ?? ""}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            placeholder="Search members..."
+            className="p-2 border rounded bg-[#0B1D26]  "
+          />
+        </div>
+       
+
+        <table className="min-w-full border-collapse bg-[#0B1D26]">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -87,28 +94,33 @@ export function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
             ))}
           </tbody>
         </table>
-      </div>
 
-      {/* 📑 Pagination */}
-      <div className="flex justify-between items-center mt-2">
-        <button
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-          className="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span>
+        
+        {/* 📑 Pagination */}
+        <div className="bg-[#0C1820] p-4">
+        {/* <span>
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
-        </span>
-        <button
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-          className="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Next
-        </button>
+        </span> */}
+          <div className="flex justify-self-end">
+            <button
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              className="flex px-3 py-2 gap-2 border-1 rounded-l-lg disabled:opacity-50"
+            >
+              <ArrowLeft size={20} />
+              Previous
+            </button>
+            <button
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              className="flex px-3 py-2 gap-2 border-1 rounded-r-lg disabled:opacity-50"
+            >
+              Next
+              <ArrowRight size={20} />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
